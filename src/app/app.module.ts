@@ -1,10 +1,10 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
 
-import { AppComponent } from './app.component';
+import {AppComponent} from './app.component';
 import {KatexModule} from 'ng-katex';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatButtonModule, MatRadioModule} from '@angular/material';
+import {MatButtonModule, MatCardModule, MatRadioModule} from '@angular/material';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 
@@ -13,9 +13,10 @@ import {HttpClientModule} from '@angular/common/http';
     AppComponent
   ],
   imports: [
-    BrowserModule, KatexModule, BrowserAnimationsModule, MatRadioModule, FormsModule, HttpClientModule, MatButtonModule
+    BrowserModule, KatexModule, BrowserAnimationsModule, MatRadioModule, FormsModule, HttpClientModule, MatButtonModule, MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

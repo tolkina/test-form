@@ -10,10 +10,10 @@ import {Answer} from './domain/title';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  test: Test;
+  testForm: Test;
   error: any;
-  result = '';
-  checked = false;
+  testResult = '';
+  testIsChecked = false;
 
   constructor(private httpService: HttpService) {
   }
@@ -25,34 +25,28 @@ export class AppComponent implements OnInit {
 
   getTest(): void {
     this.httpService.getTest()
-      .subscribe(data => this.test = data,
+      .subscribe(data => this.testForm = data,
         error => this.error = error.message);
   }
 
   checkAnswers() {
-    let sum = 0;
-    this.test.questions.forEach((question: Question) => {
-      if (question.ans.correct) {
-        sum++;
-      }
-    });
-    this.result = sum + '/' + this.test.questions.length + ' верно';
-    this.checked = true;
+    const sum = this.testForm.questions.filter((question: Question) => question.ans.correct).length;
+    this.testResult = sum + ' из ' + this.testForm.questions.length + ' верно';
+    this.testIsChecked = true;
   }
 
-  getCorrectAnswer(question: Question) {
+  getCorrectAnswer(answers: Answer[]) {
     let correctAnswer = '';
-    question.answers.forEach((answer: Answer) => {
-      if (answer.correct) {
-        correctAnswer += (question.answers.indexOf(answer) + 1).toString() + ' ';
-      }
-    });
+
+    answers.filter((answer: Answer) => answer.correct)
+      .forEach((answer: Answer) => correctAnswer += answers.indexOf(answer) + 1 + ' ');
+
     return correctAnswer;
   }
 
-  clear() {
-    this.checked = false;
-    this.result = '';
-    this.test.questions.forEach((question: Question) => question.ans = null);
+  clearAnswers() {
+    this.testIsChecked = false;
+    this.testResult = '';
+    this.testForm.questions.map((question: Question) => question.ans = null);
   }
 }

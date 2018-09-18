@@ -1,9 +1,9 @@
-.example-radio-group {
+.radio-group {
   display: inline-flex;
   flex-direction: column;
 }
 
-.example-radio-button {
+.radio-button {
   margin: 5px;
 }
 
