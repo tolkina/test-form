@@ -3,6 +3,7 @@ import {HttpService} from './service/http.service';
 import {Test} from './domain/test';
 import {Question} from './domain/question';
 import {Answer} from './domain/title';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-root',
@@ -25,8 +26,14 @@ export class AppComponent implements OnInit {
 
   getTest(): void {
     this.httpService.getTest()
-      .subscribe(data => this.testForm = data,
+      .subscribe(data => this.testForm = this.shuffleTest(data),
         error => this.error = error.message);
+  }
+
+  shuffleTest(testForm: Test) {
+    testForm.questions = _.shuffle(testForm.questions);
+    testForm.questions.forEach(question => question.answers = _.shuffle(question.answers));
+    return testForm;
   }
 
   checkAnswers() {
@@ -48,5 +55,6 @@ export class AppComponent implements OnInit {
     this.testIsChecked = false;
     this.testResult = '';
     this.testForm.questions.map((question: Question) => question.ans = null);
+    this.testForm = this.shuffleTest(this.testForm)
   }
 }
