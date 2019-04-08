@@ -1,34 +1,42 @@
 <mat-card>
-<h1 *ngIf="error">{{error}}</h1>
+  <h1 *ngIf="error">{{error}}</h1>
 
-<div *ngIf="testForm">
-  <h1>{{testForm.title}}</h1>
-  <form #myForm="ngForm">
-    <ul>
-      <li *ngFor="let question of testForm.questions">
-        <h3>{{question.title}}</h3>
+  <mat-form-field style="width: 100%">
+    <mat-label>Выберите тест</mat-label>
+    <mat-select [value]="selected" (selectionChange)="onChangeTest($event)">
+      <mat-option value="1">Информационные технологии в системах управления</mat-option>
+      <mat-option value="2">Создание фильтров детектирования конфиденциальной информации</mat-option>
+    </mat-select>
+  </mat-form-field>
 
-        <mat-radio-group class="radio-group" required [(ngModel)]="question.ans" name="{{question.title}}"
-                         [disabled]="testIsChecked">
-          <mat-radio-button class="radio-button" *ngFor="let answer of question.answers" [value]="answer">
-            {{answer.title}}<br>
-          </mat-radio-button>
-        </mat-radio-group>
+  <div *ngIf="testForm">
+    <h1>{{testForm.title}}</h1>
+    <form #myForm="ngForm">
+      <ul>
+        <li *ngFor="let question of testForm.questions">
+          <h3>{{question.title}}</h3>
 
-        <div *ngIf="testIsChecked">
-          <h4 class="correctAnswer" *ngIf="question.ans.correct">Верно</h4>
-          <h4 class="incorrectAnswer" *ngIf="!question.ans.correct">Неверно, правильный ответ
-            {{getCorrectAnswer(question.answers)}}</h4>
-        </div>
-      </li>
-    </ul>
-    <button mat-raised-button color="primary" *ngIf="!testIsChecked" [disabled]="myForm.invalid"
-            (click)="checkAnswers()">Проверить ответы
-    </button>
+          <mat-radio-group class="radio-group" required [(ngModel)]="question.ans" name="{{question.title}}"
+                           [disabled]="testIsChecked">
+            <mat-radio-button class="radio-button" *ngFor="let answer of question.answers" [value]="answer">
+              {{answer.title}}<br>
+            </mat-radio-button>
+          </mat-radio-group>
 
-  </form>
-</div>
+          <div *ngIf="testIsChecked">
+            <h4 class="correctAnswer" *ngIf="question.ans.correct">Верно</h4>
+            <h4 class="incorrectAnswer" *ngIf="!question.ans.correct">Неверно, правильный ответ
+              {{getCorrectAnswer(question.answers)}}</h4>
+          </div>
+        </li>
+      </ul>
+      <button mat-raised-button color="primary" *ngIf="!testIsChecked" [disabled]="myForm.invalid"
+              (click)="checkAnswers()">Проверить ответы
+      </button>
 
-<h1 *ngIf="testResult">Результаты теста: {{testResult}}</h1>
-<button mat-raised-button *ngIf="testIsChecked" (click)="clearAnswers()">Очистить</button>
+    </form>
+  </div>
+
+  <h1 *ngIf="testResult">Результаты теста: {{testResult}}</h1>
+  <button mat-raised-button *ngIf="testIsChecked" (click)="clearAnswers()">Очистить</button>
 </mat-card>

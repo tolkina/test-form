@@ -3,7 +3,9 @@ import {HttpService} from './service/http.service';
 import {Test} from './domain/test';
 import {Question} from './domain/question';
 import {Answer} from './domain/title';
-import * as _ from 'lodash';
+import {shuffle} from 'lodash';
+import {MatSelectChange} from '@angular/material/typings/select';
+import {first} from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -12,27 +14,39 @@ import * as _ from 'lodash';
 })
 export class AppComponent implements OnInit {
   testForm: Test;
+  tests = [] as Test[];
   error: any;
   testResult = '';
   testIsChecked = false;
+  selected = '2';
 
   constructor(private httpService: HttpService) {
   }
 
   ngOnInit() {
-    this.getTest();
+    this.getTest('1');
+    this.getTest('2');
   }
 
+  onChangeTest(matSelectChange: MatSelectChange) {
+    this.selected = matSelectChange.value;
+    this.testForm = this.tests[matSelectChange.value === '1' ? 0 : 1];
+    this.clearAnswers();
+  }
 
-  getTest(): void {
-    this.httpService.getTest()
-      .subscribe(data => this.testForm = this.shuffleTest(data),
+  getTest(selected: string): void {
+    this.httpService.getTest(selected)
+      .pipe(first())
+      .subscribe(data => {
+          this.tests.push(this.shuffleTest(data));
+          this.testForm = data;
+        },
         error => this.error = error.message);
   }
 
   shuffleTest(testForm: Test) {
-    testForm.questions = _.shuffle(testForm.questions);
-    testForm.questions.forEach(question => question.answers = _.shuffle(question.answers));
+    testForm.questions = shuffle(testForm.questions);
+    testForm.questions.forEach(question => question.answers = shuffle(question.answers));
     return testForm;
   }
 
@@ -55,6 +69,6 @@ export class AppComponent implements OnInit {
     this.testIsChecked = false;
     this.testResult = '';
     this.testForm.questions.map((question: Question) => question.ans = null);
-    this.testForm = this.shuffleTest(this.testForm)
+    this.testForm = this.shuffleTest(this.testForm);
   }
 }

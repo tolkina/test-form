@@ -12,8 +12,9 @@ export class HttpService {
   constructor(private http: HttpClient) {
   }
 
-  getTest(): Observable<Test> {
-    return this.http.get<Test>('test.json').pipe(
+  getTest(option: string): Observable<Test> {
+    const name = option === '1' ? 'test.json' : 'test2.json';
+    return this.http.get<Test>(name).pipe(
       catchError(err => {
         console.log(err);
         return throwError(err);
